@@ -5,31 +5,31 @@
 			<div class="row">
 				<div class="col-12 form-title text-center">
 					<span class="text-center">{{mtitle}}</span>
-                    <p class="text-center date-text">{{today_date}}</p>
+                    <p class="text-center date-text">{{appdata.tstamp}}</p>
 				</div>
 			</div>
 			<div class="input-container">
 				<div class="row">
 					<span class="req-input" >
                         <img class="input-status" src="../assets/stdlogo.png" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
-						<input type="number" data-min-length="8" placeholder="Amount in INR">
+						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.scbal">
 					</span>
 				</div>
 				<div class="row">
 					<span class="req-input" >
                         <img class="input-status" src="../assets/allahabadlogo.png" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
-						<input type="number" data-min-length="8" placeholder="Amount in INR">
+						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.alabal">
 					</span>
 				</div>
 				<div class="row">
 					<span class="req-input" >
                         <img class="input-status" src="../assets/sbilogo.jpg" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
-						<input type="number" data-min-length="8" placeholder="Amount in INR">
+						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.sbibal">
 					</span>
 				</div>
 				
 				<div class="row submit-row">
-					<button type="button" class="btn btn-block submit-form">Submit</button>
+					<button type="button" class="btn btn-block submit-form" @click="postbalance">Submit</button>
 				</div>
 			</div>
 			</div>
@@ -37,6 +37,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     name:'BalanceForm',
    props: {
@@ -44,9 +45,40 @@ export default {
   },
     data:function(){
         return{
-            today_date:new Date()
+			appdata:{
+				scbal:'',
+				alabal:'',
+				sbibal:'',
+				tstamp: new Date()
+			}
         }
-    }
+	},
+	mounted(){
+		this.getbalance()
+	},
+	methods:{
+		postbalance() {
+			axios.post(`http://jsonplaceholder.typicode.com/posts`, {
+			appdata: this.appdata
+			})
+			.then(response => {
+				//this.appdata = response.data.appdata
+			})
+			.catch(e => {
+			this.errors.push(e)
+			})
+		},
+		getbalance(){
+			axios.get(`http://jsonplaceholder.typicode.com/posts`)
+			.then(response => {
+			// JSON responses are automatically parsed.
+			this.appdata = response.data.appdata
+			})
+			.catch(e => {
+			this.errors.push(e)
+			})
+		}
+	}
 }
 </script>
 <style scoped>
