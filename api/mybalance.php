@@ -41,7 +41,7 @@
 
     //read all data
     if ($action == 'readall') {
-        $result = $conn->query("SELECT * FROM `mybalance`");
+        $result = $conn->query("SELECT * FROM `mybalance` ORDER BY myid DESC");
         $balance  = array();
 
         while ($row = $result->fetch_assoc()) {
