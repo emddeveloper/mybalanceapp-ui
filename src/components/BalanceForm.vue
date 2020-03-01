@@ -1,11 +1,10 @@
 <template>
-    <div>
         <div class="col-sm-12">
-			<div id="contact-form" class="form-container row" data-form-container>
+			<div id="contact-form" class="form-container" data-form-container>
 			<div class="row">
 				<div class="col-12 form-title text-center">
 					<span class="text-center">{{mtitle}}</span>
-                    <p class="text-center date-text">{{appdata.tstamp}}</p>
+                    <p class="text-center date-text">Last updated: {{appdata.tstamp}}</p>
 				</div>
 			</div>
 			<div class="input-container">
@@ -33,8 +32,6 @@
 				</div>
 			</div>
 			</div>
-			{{appdata}}
-		</div>
     </div>
 </template>
 <script>
@@ -46,37 +43,46 @@ export default {
   },
     data:function(){
         return{
+			timenow:new Date(),
 			appdata:{
-				scbal:'',
-				alabal:'',
-				sbibal:'',
-				tstamp:new Date()
-			}
+				timenow:new Date(),
+			},
+			getdata:{}
         }
 	},
 	mounted(){
-		//this.getbalance()
+		this.getlastbalance()
 	},
 	methods:{
 		postbalance() {
-			axios.post(`http://jsonplaceholder.typicode.com/posts`, {
-			appdata: this.appdata
-			})
+			axios.post(`http://balance.emddeveloper.com/api/mybalance.php?action=create`,this.appdata)
 			.then(response => {
 				//this.appdata = response.data.appdata
 			})
 			.catch(e => {
-			this.errors.push(e)
+			//this.errors.push(e)
 			})
 		},
-		getbalance(){
-			axios.get(`http://jsonplaceholder.typicode.com/posts`)
+		getlastbalance(){
+			axios.get(`http://balance.emddeveloper.com/api/mybalance.php?action=readlast`)
 			.then(response => {
 			// JSON responses are automatically parsed.
-			this.appdata = response.data.appdata
+			this.appdata = response.data.balance[0]
+			
 			})
 			.catch(e => {
-			this.errors.push(e)
+			//this.errors.push(e)
+			})
+		},
+		getallbalance(){
+			axios.get(`http://balance.emddeveloper.com/api/mybalance.php?action=readall`)
+			.then(response => {
+			// JSON responses are automatically parsed.
+			this.appdata = response.data.balance[0]
+			
+			})
+			.catch(e => {
+			//this.errors.push(e)
 			})
 		}
 	}
@@ -308,7 +314,7 @@ font-size: 13px;
 }
 
 .form-container {
-	padding:20px;
+	padding:20px 0;
 	border-radius:0px;
 	background:#B3E5FC;
 	color:#00838F;

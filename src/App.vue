@@ -2,7 +2,7 @@
   <div id="app" class="container">
     <div id="nav">
       <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+      <router-link to="/about">Balance Sheet</router-link>
     </div>
     <router-view class="row" />
     <footer>Developed and Maintained by <a href="https://in.linkedin.com/in/skaminul" target="_blank">SK Aminul Islam</a></footer>
