@@ -33,6 +33,7 @@
 				</div>
 			</div>
 			</div>
+			{{appdata}}
 		</div>
     </div>
 </template>
@@ -49,12 +50,12 @@ export default {
 				scbal:'',
 				alabal:'',
 				sbibal:'',
-				tstamp: new Date()
+				tstamp:new Date()
 			}
         }
 	},
 	mounted(){
-		this.getbalance()
+		//this.getbalance()
 	},
 	methods:{
 		postbalance() {
