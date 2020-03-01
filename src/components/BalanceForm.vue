@@ -1,5 +1,8 @@
 <template>
         <div class="col-sm-12">
+			<div class="loader dark" v-if="initload">
+				<input type="password" v-model="authkey" v-on:keyup="authcheck(authkey)" placeholder="Enter OTP" class="auth">
+			</div>
 			<div class="loader" v-if="loading">
 				<img src="../assets/3.gif">
 			</div>
@@ -54,7 +57,9 @@ export default {
 				timenow:new Date(),
 			},
 			getdata:{},
-			loading:false
+			loading:false,
+			initload:true,
+			authkey:''
         }
 	},
 	mounted(){
@@ -98,14 +103,42 @@ export default {
 			//this.errors.push(e)
 			})
 		},
-		resetValue(x){
-			this.appdata['x']='';
+		authcheck(x){
+			if(x.length===4){
+				axios.post(`http://balance.emddeveloper.com/api/mybalance.php?action=auth`,{'auth':x})
+				.then(response => {
+					this.authkey='';
+					if(response.data.auth===true){
+						this.initload=false;
+					}
+					else{
+						this.authkey='';
+						this.initload=true;
+					}
+					//this.appdata = response.data.appdata
+				})
+				.catch(e => {
+					this.authkey='';
+					this.initload=true;
+				//this.errors.push(e)
+				})
+			}
+			else{
+				this.initload=true
+			}
 		}
 	}
 }
 </script>
 <style scoped>
-
+.loader.dark{
+background:#17a2b8 !important;
+}
+.auth{
+	    position: absolute;
+    top: 100px;
+    left: calc(50vw - 100px);
+}
 span.remove-x {
     position: absolute;
     right: 22px;

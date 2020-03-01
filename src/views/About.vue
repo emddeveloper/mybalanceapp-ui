@@ -15,7 +15,7 @@
     </thead>
     <tbody>     
       <tr class="" v-for="(x,index) in appdata" :key=index :class="(index%2==0) ? 'table-success' :'table-warning'">
-        <td class="text-center">{{x.myid}}</td>
+        <td class="text-center">{{index+1}}</td>
         <td class="text-right">&#8377;{{x.scbal}}</td>
         <td class="text-right">&#8377;{{x.alabal}}</td>
         <td class="text-right">&#8377;{{x.sbibal}}</td>

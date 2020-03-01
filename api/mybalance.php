@@ -1,5 +1,4 @@
 <?php
-
 	// Content Type JSON
     header("Content-type: application/json");
     header("Access-Control-Allow-Origin: *");    
@@ -19,7 +18,8 @@
         die("Connection failed: " . $conn->connect_error);
     }
     $_POST = json_decode(file_get_contents('php://input'), true);
-	$res = array('error' => false);
+    $res = array('error' => false);
+    $res['auth'] = false;
 
 
 	// Read data from database
@@ -28,7 +28,9 @@
 	if (isset($_GET['action'])) {
 		$action = $_GET['action'];
 	}
-
+    if ($action == 'auth' && !empty($_POST) && $_POST['auth']==='5566') {
+        $res['auth'] = true;
+	}
 	if ($action == 'readlast') {
         $result = $conn->query("SELECT * FROM `mybalance` ORDER BY myid DESC LIMIT 1");
         $balance  = array();
