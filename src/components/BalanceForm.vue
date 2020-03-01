@@ -1,5 +1,8 @@
 <template>
         <div class="col-sm-12">
+			<div class="loader" v-if="loading">
+				<img src="../assets/3.gif">
+			</div>
 			<div id="contact-form" class="form-container" data-form-container>
 			<div class="row">
 				<div class="col-12 form-title text-center">
@@ -12,18 +15,21 @@
 					<span class="req-input" >
                         <img class="input-status" src="../assets/stdlogo.png" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
 						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.scbal">
+						<span class="remove-x" @click="appdata.scbal=''">X</span>
 					</span>
 				</div>
 				<div class="row">
 					<span class="req-input" >
                         <img class="input-status" src="../assets/allahabadlogo.png" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
 						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.alabal">
+						<span class="remove-x"  @click="appdata.alabal=''">X</span>
 					</span>
 				</div>
 				<div class="row">
 					<span class="req-input" >
                         <img class="input-status" src="../assets/sbilogo.jpg" data-toggle="tooltip" data-placement="top" title="standard chartered balance">
 						<input type="number" data-min-length="8" placeholder="Amount in INR" v-model="appdata.sbibal">
+						<span class="remove-x"  @click="appdata.sbibal=''">X</span>
 					</span>
 				</div>
 				
@@ -47,7 +53,8 @@ export default {
 			appdata:{
 				timenow:new Date(),
 			},
-			getdata:{}
+			getdata:{},
+			loading:false
         }
 	},
 	mounted(){
@@ -55,22 +62,28 @@ export default {
 	},
 	methods:{
 		postbalance() {
+			this.loading=true;
 			axios.post(`http://balance.emddeveloper.com/api/mybalance.php?action=create`,this.appdata)
 			.then(response => {
+				this.loading=false;
 				//this.appdata = response.data.appdata
 			})
 			.catch(e => {
+				this.loading=false;
 			//this.errors.push(e)
 			})
 		},
 		getlastbalance(){
+				this.loading=true;
 			axios.get(`http://balance.emddeveloper.com/api/mybalance.php?action=readlast`)
 			.then(response => {
+				this.loading=false;
 			// JSON responses are automatically parsed.
 			this.appdata = response.data.balance[0]
 			
 			})
 			.catch(e => {
+				this.loading=false;
 			//this.errors.push(e)
 			})
 		},
@@ -84,11 +97,25 @@ export default {
 			.catch(e => {
 			//this.errors.push(e)
 			})
+		},
+		resetValue(x){
+			this.appdata['x']='';
 		}
 	}
 }
 </script>
 <style scoped>
+
+span.remove-x {
+    position: absolute;
+    right: 22px;
+    top: 8px;
+    color: #0000005c;
+    cursor: pointer;
+    padding: 0px 0px;
+    width: 30px;
+    height: 30px;
+}
 .form-container div, .form-container  span{
     font-family: Calibri, Candara, Segoe, 'Segoe UI', Optima, Arial, sans-serif;
 }

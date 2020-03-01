@@ -1,5 +1,8 @@
 <template>
-  <div class="about">
+  <div class="about mt-2">
+    <div class="loader" v-if="loading">
+				<img src="../assets/3.gif">
+			</div>
    <table class="table">
     <thead>
       <tr class="table-header">
@@ -11,7 +14,7 @@
       </tr>
     </thead>
     <tbody>     
-      <tr class="table-success" v-for="(x,index) in appdata" :key=index>
+      <tr class="" v-for="(x,index) in appdata" :key=index :class="(index%2==0) ? 'table-success' :'table-warning'">
         <td class="text-center">{{x.myid}}</td>
         <td class="text-right">&#8377;{{x.scbal}}</td>
         <td class="text-right">&#8377;{{x.alabal}}</td>
@@ -35,7 +38,8 @@ export default {
   name:'about',
   data:function(){
     return{
-        appdata:{}
+        appdata:{},
+        loading:false
     }
   },
   created(){
@@ -43,12 +47,15 @@ export default {
   },
   methods:{
     getallbalance(){
+      this.loading=true;
 			axios.get(`http://balance.emddeveloper.com/api/mybalance.php?action=readall`)
 			.then(response => {
 			// JSON responses are automatically parsed.
-			 this.appdata = response.data.balance
+       this.appdata = response.data.balance
+        this.loading=false;
 			})
 			.catch(e => {
+         this.loading=false;
 			//this.errors.push(e)
 			})
 		}
